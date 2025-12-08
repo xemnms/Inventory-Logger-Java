@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.Scanner;
 
-public class InventoryLogger {
+public class inventoryLogger {
     
     public static void main(String[] args) {
         // Scanner for user input
