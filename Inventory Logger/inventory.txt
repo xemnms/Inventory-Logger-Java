@@ -1,3 +1,4 @@
 Gummy Worms, 75, High Stock
 Polvoron, 30, Medium Stock
 Marshmallow, 5, Low Stock
+Skittles, 100, High Stock
