@@ -1,4 +1,3 @@
-package inventorylogger;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -6,14 +5,10 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class inventoryLogger {
-   public inventoryLogger() {
-   }
-
-   public static void main(String[] var0) {
-      Scanner var1 = new Scanner(System.in);
-      boolean var2 = false;
-      String[] var3 = new String[100];
-      int var4 = 0;
+   public static void main(String[] args) {
+      Scanner inputScanner = new Scanner(System.in);
+      String[] inventoryRecords = new String[100];
+      int recordCount = 0;
       System.out.println("=== INVENTORY MANAGEMENT SYSTEM ===");
 
       while(true) {
@@ -23,71 +18,80 @@ public class inventoryLogger {
             System.out.println("[2] View Inventory Items");
             System.out.println("[3] Exit Program");
             System.out.print("Enter your choice: ");
-            int var15 = var1.nextInt();
-            var1.nextLine();
-            switch (var15) {
+            int menuChoice = inputScanner.nextInt();
+            inputScanner.nextLine();
+            switch (menuChoice) {
                case 1:
                   System.out.println("\n--- ADD NEW ITEM ---");
                   System.out.print("Enter Item Name: ");
-                  String var5 = var1.nextLine();
+                  String itemName = inputScanner.nextLine();
                   System.out.print("Enter Quantity: ");
-                  int var6 = var1.nextInt();
-                  var1.nextLine();
-                  String var7 = var6 >= 50 ? "High Stock" : (var6 >= 10 ? "Medium Stock" : (var6 >= 1 ? "Low Stock" : "Out of Stock"));
-                  System.out.println("\nItem: " + var5);
-                  System.out.println("Quantity: " + var6);
-                  System.out.println("Category: " + var7);
-                  var3[var4] = var5 + ", " + var6 + ", " + var7;
-                  ++var4;
+                  int quantity = inputScanner.nextInt();
+                  inputScanner.nextLine();
+                  String stockCategory = quantity >= 50 ? "High Stock" : (quantity >= 10 ? "Medium Stock" : (quantity >= 1 ? "Low Stock" : "Out of Stock"));
+                  System.out.println("\nItem: " + itemName);
+                  System.out.println("Quantity: " + quantity);
+                  System.out.println("Category: " + stockCategory);
+                  inventoryRecords[recordCount] = itemName + ", " + quantity + ", " + stockCategory;
+                  recordCount++;
 
-                  try {
-                     FileWriter var16 = new FileWriter("inventory.txt", true);
-                     var16.write(var5 + ", " + var6 + ", " + var7 + "\n");
-                     var16.close();
-                     System.out.println("Item saved to file!");
-                  } catch (IOException var13) {
+                  try (FileWriter fileWriter = new FileWriter("inventory.txt", true)) {
+                      fileWriter.write(itemName + ", " + quantity + ", " + stockCategory + "\n");
+                      System.out.println("Item saved to file!");
+                  } catch (IOException e) {
                      System.out.println("Error saving to file!");
                   }
                   break;
                case 2:
                   System.out.println("\n--- INVENTORY LIST ---");
-                  boolean var8 = false;
-                  int var9 = 0;
-
-                  for(; var9 < var4; ++var9) {
-                     if (var3[var9] != null) {
-                        System.out.println(var3[var9]);
-                        var8 = true;
+                  boolean hasMemoryItems = false;
+                  for (int memoryIndex = 0; memoryIndex < recordCount; ++memoryIndex) {
+                     if (inventoryRecords[memoryIndex] != null) {
+                        String[] parts = inventoryRecords[memoryIndex].split(",", 3);
+                        if (parts.length == 3) {
+                           System.out.println("Item: " + parts[0].trim());
+                           System.out.println("Quantity: " + parts[1].trim());
+                           System.out.println("Category: " + parts[2].trim());
+                        } else {
+                           System.out.println(inventoryRecords[memoryIndex]);
+                        }
+                        hasMemoryItems = true;
                      }
                   }
 
-                  if (!var8) {
+                  if (!hasMemoryItems) {
                      System.out.println("(No items in memory)");
                   }
 
                   System.out.println("\n--- FILE CONTENTS ---");
 
                   try {
-                     File var17 = new File("inventory.txt");
-                     Scanner var10 = new Scanner(var17);
-
-                     boolean var11;
-                     for(var11 = false; var10.hasNextLine(); var11 = true) {
-                        String var12 = var10.nextLine();
-                        System.out.println(var12);
+                     File inventoryFile = new File("inventory.txt");
+                     Scanner fileScanner = new Scanner(inventoryFile);
+                     boolean hasFileData = false;
+                     while (fileScanner.hasNextLine()) {
+                         String fileLine = fileScanner.nextLine();
+                         String[] parts = fileLine.split(",", 3);
+                         if (parts.length == 3) {
+                            System.out.println("Item: " + parts[0].trim());
+                            System.out.println("Quantity: " + parts[1].trim());
+                            System.out.println("Category: " + parts[2].trim());
+                         } else {
+                            System.out.println(fileLine);
+                         }
+                         hasFileData = true;
                      }
-
-                     var10.close();
-                     if (!var11) {
+                     fileScanner.close();
+                     if (!hasFileData) {
                         System.out.println("No inventory data found in file.");
                      }
-                  } catch (FileNotFoundException var14) {
+                  } catch (FileNotFoundException e) {
                      System.out.println("Inventory file not found.");
                   }
                   break;
                case 3:
                   System.out.println("Exiting program. Thank you!");
-                  var1.close();
+                  inputScanner.close();
                   System.exit(0);
                   break;
                default:
