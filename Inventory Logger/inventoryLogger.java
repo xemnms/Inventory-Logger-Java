@@ -58,28 +58,8 @@ public class inventoryLogger {
                   break;
                   
                case 2:
-                  // View all inventory items
+                  // View all inventory items from file
                   System.out.println("\n--- INVENTORY LIST ---");
-                  
-                  // Loop through items stored in memory
-                  if (inventoryRecords.isEmpty()) {
-                     System.out.println("(No items in memory)");
-                  } else {
-                     for (String record : inventoryRecords) {
-                        // Split the record and display nicely
-                        String[] parts = record.split(",", 3);
-                        if (parts.length == 3) {
-                           System.out.println("Item: " + parts[0].trim());
-                           System.out.println("Quantity: " + parts[1].trim());
-                           System.out.println("Category: " + parts[2].trim());
-                        } else {
-                           System.out.println(record);
-                        }
-                     }
-                  }
-
-                  // Now read and display from file
-                  System.out.println("\n--- FILE CONTENTS ---");
 
                   try {
                      File inventoryFile = new File("inventory.txt");
