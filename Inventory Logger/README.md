@@ -1,18 +1,31 @@
-## Getting Started
+# Inventory Logger
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+A simple command-line inventory management system built in Java. This program allows users to add items to their inventory, automatically categorize them based on stock levels, and view all saved items from a persistent file.
 
-## Folder Structure
+## Features
 
-The workspace contains two folders by default, where:
+- **Add Items**: Add new items with name and quantity to your inventory
+- **Automatic Stock Categorization**: Items are automatically categorized by quantity:
+  - High Stock: 50+ units
+  - Medium Stock: 10-49 units
+  - Low Stock: 1-9 units
+  - Out of Stock: 0 units
+- **View Inventory**: Display all items saved in the inventory file with formatted output
+- **Persistent Storage**: All items are saved to `inventory.txt` and persist between program runs
+- **Input Validation**: Empty item names are rejected to prevent invalid entries
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## How It Works
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+The program presents a menu-driven interface with three main options:
+1. Add new items to the inventory with automatic stock categorization
+2. View all items currently stored in the inventory file
+3. Exit the program
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+All data is stored directly in a text file, making it easy to backup and transfer your inventory data.
 
-## Dependency Management
+## Technical Details
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+- **Language**: Java
+- **Storage**: File-based (inventory.txt)
+- **Dependencies**: None - uses only Java standard library
+- **Data Format**: Comma-separated values (ItemName, Quantity, StockCategory)
