@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 // Simple inventory management system for tracking items
@@ -10,8 +9,6 @@ public class inventoryLogger {
    public static void main(String[] args) {
       // Scanner for user input
       Scanner inputScanner = new Scanner(System.in);
-      // ArrayList to store inventory records in memory (dynamic sizing)
-      ArrayList<String> inventoryRecords = new ArrayList<>();
       
       System.out.println("=== INVENTORY MANAGEMENT SYSTEM ===");
 
@@ -33,6 +30,13 @@ public class inventoryLogger {
                   System.out.println("\n--- ADD NEW ITEM ---");
                   System.out.print("Enter Item Name: ");
                   String itemName = inputScanner.nextLine();
+                  
+                  // Check if item name is empty
+                  if (itemName.trim().isEmpty()) {
+                     System.out.println("Item name is empty! Item discarded.");
+                     break;
+                  }
+                  
                   System.out.print("Enter Quantity: ");
                   int quantity = inputScanner.nextInt();
                   inputScanner.nextLine(); // Clear buffer
@@ -44,16 +48,13 @@ public class inventoryLogger {
                   System.out.println("\nItem: " + itemName);
                   System.out.println("Quantity: " + quantity);
                   System.out.println("Category: " + stockCategory);
-                  
-                  // Store in ArrayList
-                  inventoryRecords.add(itemName + ", " + quantity + ", " + stockCategory);
 
-                  // Save to file
+                  // Save directly to file
                   try (FileWriter fileWriter = new FileWriter("inventory.txt", true)) {
                       fileWriter.write(itemName + ", " + quantity + ", " + stockCategory + "\n");
-                      System.out.println("Item saved to file!");
+                      System.out.println("Item saved to inventory file!");
                   } catch (IOException e) {
-                     System.out.println("Error saving to file!");
+                     System.out.println("Error saving to inventory file!");
                   }
                   break;
                   
@@ -75,6 +76,7 @@ public class inventoryLogger {
                             System.out.println("Item: " + parts[0].trim());
                             System.out.println("Quantity: " + parts[1].trim());
                             System.out.println("Category: " + parts[2].trim());
+                            System.out.println(); // Empty line between items
                          } else {
                             System.out.println(fileLine);
                          }
@@ -84,6 +86,9 @@ public class inventoryLogger {
                      
                      if (!hasFileData) {
                         System.out.println("No inventory data found in file.");
+                     } else {
+                        // Print breaking line to indicate end of inventory
+                        System.out.println("----------------------");
                      }
                   } catch (FileNotFoundException e) {
                      System.out.println("Inventory file not found.");
